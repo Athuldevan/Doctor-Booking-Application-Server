@@ -1,0 +1,25 @@
+{
+  "name": "doctor-booking-application",
+  "version": "1.0.0",
+  "description": "A Doctor Bokking Application ",
+  "scripts": {
+    "dev": "env-cmd -f .env.dev tsx watch src/apps/server.ts",
+    "build": "tsc -p .",
+    "start": "env-cmd -f .env.prod node dist/apps/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "@types/mongoose": "^5.11.96",
+    "@types/typescript": "^0.4.29",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.1",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "env-cmd": "^11.0.0",
+    "tsx": "^4.21.0"
+  }
+}
