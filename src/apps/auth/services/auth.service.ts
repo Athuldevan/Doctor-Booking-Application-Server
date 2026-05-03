@@ -19,7 +19,7 @@ export const loginService = async (
   password: string,
   role: Role,
 ) => {
-  console.log(email, password, role)
+  console.log(email, password, role);
   const user = await User.findOne({ email, role });
   if (!user) throw new AppError("No Such User found", 404);
 
@@ -63,4 +63,12 @@ export const clearAuthCookie = (res: Response) => {
       sameSite: "lax" as const,
     }),
   );
+};
+
+export const getAuthUser = async (
+  query: Record<string, any> = {},
+  role: Role,
+) => {
+  const user = await User.findOne({ ...query, isDeleted: false });
+  return user
 };

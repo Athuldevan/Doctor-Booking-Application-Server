@@ -1,4 +1,4 @@
-export type Role = "admin" | "patient";
+export type Role = "admin" | "patient" | 'doctor';
 
 export interface IUser {
   name: string;

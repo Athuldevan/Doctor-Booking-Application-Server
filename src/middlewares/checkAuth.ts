@@ -30,6 +30,7 @@ export const checkAuth = (
     ) as IPayload;
     if (!decoded) return next(new AppError("Token Invalid or expired", 401));
     req.user = decoded;
+    next();
   } catch (err) {
     return next(new AppError("Token invalid or expired", 401));
   }

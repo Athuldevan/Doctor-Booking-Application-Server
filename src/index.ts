@@ -4,7 +4,11 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 import authRouter from "./apps/auth/routes/auth.routes";
+import tokenRoutes from "./apps/auth/routes/auth.routes";
 import errorHandler from "./utils/errorHandler";
+import doctorRoutes from "./apps/doctor/routes/doctor.routes";
+import slotRoutes from "./apps/booking/routes/booking.routes";
+
 const app: Express = express();
 const db_url = process.env.DB_URL;
 if (!db_url) {
@@ -28,8 +32,11 @@ app.use(
 );
 
 app.use("/api/auth", authRouter);
+app.use("/api/token", tokenRoutes);
 
+app.use("/api/doctors", doctorRoutes);
+app.use("/api/slots", slotRoutes);
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 export default app;
