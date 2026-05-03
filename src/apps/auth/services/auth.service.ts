@@ -19,7 +19,8 @@ export const loginService = async (
   password: string,
   role: Role,
 ) => {
-  const user = await User.findOne({ email, password, role });
+  console.log(email, password, role)
+  const user = await User.findOne({ email, role });
   if (!user) throw new AppError("No Such User found", 404);
 
   const match = await bcrypt.compare(password, user.password);
