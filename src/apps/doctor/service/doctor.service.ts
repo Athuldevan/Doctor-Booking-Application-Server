@@ -46,18 +46,26 @@ export const getAllDoctorsService = async (query: Partial<IDoctor>) => {
 
 export const updateADoctorService = async (
   filter: Partial<IDoctor>,
-  body: Partial<IDoctor>,
+  body: any,
 ) => {
-  const doctor = await Doctor.findOneAndUpdate(
-    { ...filter, isDeleted: false },
-    { ...body },
-    { new: true },
-  )
-    .populate("user", "name email phone")
-    .lean(true);
-
+  const doctor = await Doctor.findOne({ ...filter, isDeleted: false });
   if (!doctor) throw new AppError("Doctor Not found", 404);
-  return doctor;
+
+ 
+  if (body.specialization) doctor.specialization = body.specialization;
+  if (body.experience) doctor.experience = body.experience;
+  if (body.consultationFee) doctor.consultationFee = body.consultationFee;
+  if (body.bio) doctor.bio = body.bio;
+  await doctor.save();
+
+  if (body.name || body.phone) {
+    await User.findByIdAndUpdate(doctor.user, {
+      ...(body.name && { name: body.name }),
+      ...(body.phone && { phone: body.phone }),
+    });
+  }
+
+  return Doctor.findById(doctor._id).populate("user", "name email phone");
 };
 
 export const deleteADoctorService = async (

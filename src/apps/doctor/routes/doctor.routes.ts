@@ -14,11 +14,11 @@ const router = express.Router();
 router
   .route("/")
   .post(checkAuth, tryCatch(addDoctor))
-  .get(checkAuth, checkAccess("admin"), tryCatch(getAllDoctor));
+  .get(checkAuth, checkAccess("admin", "patient"), tryCatch(getAllDoctor));
 
 router
   .route("/:id")
-  .get(checkAuth, checkAccess("admin"), tryCatch(getADoctor))
+  .get(checkAuth, checkAccess("admin", "patient"), tryCatch(getADoctor))
   .put(checkAuth, checkAccess("admin"), tryCatch(updateADoctor))
   .patch(checkAuth, checkAccess("admin"), tryCatch(deleteADoctor));
 export default router;

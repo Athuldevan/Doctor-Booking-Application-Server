@@ -7,6 +7,7 @@ import {
   updateSlotStatus,
   cancelSlot,
   deleteSlot,
+  updateSlotGroup,
 } from "../controller/booking.controller";
 import { checkAuth } from "../../../middlewares/checkAuth";
 import checkAccess from "../../../middlewares/checkAccess";
@@ -17,6 +18,7 @@ const router = express.Router();
 router.post("/", checkAuth, checkAccess("admin"), createSlot);
 router.get("/", checkAuth, checkAccess("admin"), getAllSlots);
 router.delete("/:doctorSlotId", checkAuth, checkAccess("admin"), deleteSlot);
+router.patch("/:doctorSlotId", checkAuth, checkAccess("admin"), updateSlotGroup);
 
 // admin + doctor
 router.patch(

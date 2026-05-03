@@ -19,7 +19,9 @@ export const TimeSlotSchema = new mongoose.Schema<ITimeSlot>(
         "available",
         "pending",
         "confirmed",
-        "cancelled"
+        "cancelled",
+        "completed",
+        "blocked",
       ],
       default: "available",
     },

@@ -32,7 +32,13 @@ export const getSlotByDoctorService = async (
     isDeleted: false,
   };
 
-  if (date) filter.date = new Date(date);
+  if (date) {
+    const start = new Date(date);
+    start.setUTCHours(0, 0, 0, 0);
+    const end = new Date(date);
+    end.setUTCHours(23, 59, 59, 999);
+    filter.date = { $gte: start, $lte: end };
+  }
 
   return Slot.find(filter)
     .populate("timeSlots.patient", "name email phone")
@@ -124,6 +130,15 @@ export const deleteSlotService = async (
     { new: true }
   );
 
+  if (!slot) throw new AppError("Slot not found", 404);
+  return slot;
+};
+
+export const updateSlotGroupService = async (
+  id: string,
+  data: Partial<ISlot>
+) => {
+  const slot = await Slot.findByIdAndUpdate(id, data, { new: true });
   if (!slot) throw new AppError("Slot not found", 404);
   return slot;
 };
