@@ -24,7 +24,7 @@ export const bookSlotValidation = Joi.object({
 });
 
 export const cancelSlotValidation = Joi.object({
-  cancelReason: Joi.string().max(200).required(),
+  cancelReason: Joi.string().max(200).optional(),
 });
 
 export const updateSlotGroupValidation = Joi.object({
