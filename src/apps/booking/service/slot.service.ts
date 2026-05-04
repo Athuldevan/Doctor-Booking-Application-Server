@@ -49,6 +49,8 @@ export const bookSlotService = async (
   timeSlotId: string,
   patientId: string
 ) => {
+  const patientObjectId = new Types.ObjectId(patientId);
+
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -63,7 +65,7 @@ export const bookSlotService = async (
       {
         $set: {
           "timeSlots.$.status": "pending",
-          "timeSlots.$.patient": patientId,
+          "timeSlots.$.patient": patientObjectId,
         },
       },
       { session, new: true }
