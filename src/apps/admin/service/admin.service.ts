@@ -242,6 +242,18 @@ export const getAdminAppointmentsService = async (opts: {
       },
     },
     { $unwind: "$doctorUser" },
+    // Convert patient to ObjectId for robust join
+    {
+      $addFields: {
+        "timeSlots.patient": {
+          $cond: {
+            if: { $ne: ["$timeSlots.patient", null] },
+            then: { $toObjectId: "$timeSlots.patient" },
+            else: null,
+          },
+        },
+      },
+    },
     // Lookup patient user
     {
       $lookup: {
