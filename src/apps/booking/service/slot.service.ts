@@ -90,6 +90,47 @@ export const updateSlotStatusService = async (
   timeSlotId: string,
   status: ITimeSlot["status"]
 ) => {
+  const slotDoc = await Slot.findOne(
+    {
+      _id: doctorSlotId,
+      isDeleted: false,
+      "timeSlots._id": timeSlotId,
+    },
+    {
+      timeSlots: { $elemMatch: { _id: timeSlotId } },
+    }
+  );
+
+  if (!slotDoc || !slotDoc.timeSlots?.length) {
+    throw new AppError("Slot not found", 404);
+  }
+
+  const currentSlot = slotDoc.timeSlots[0];
+  const currentStatus = currentSlot.status;
+
+  const allowedTransitions: Partial<
+    Record<ITimeSlot["status"], ITimeSlot["status"][]>
+  > = {
+    available: ["pending", "blocked"],
+    pending: ["confirmed", "cancelled"],
+    confirmed: ["completed", "cancelled"],
+  };
+
+  const nextAllowedStatuses = allowedTransitions[currentStatus] ?? [];
+  if (!nextAllowedStatuses.includes(status)) {
+    throw new AppError(
+      `Invalid status transition from ${currentStatus} to ${status}`,
+      400
+    );
+  }
+
+  if (status === "confirmed" && !currentSlot.patient) {
+    throw new AppError(
+      "Cannot confirm slot without a patient assignment",
+      400
+    );
+  }
+
   const slot = await Slot.findOneAndUpdate(
     {
       _id: doctorSlotId,

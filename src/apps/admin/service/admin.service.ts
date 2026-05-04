@@ -286,7 +286,13 @@ export const getAdminAppointmentsService = async (opts: {
           $cond: {
             if: { $gt: [{ $size: "$patientUser" }, 0] },
             then: { $arrayElemAt: ["$patientUser.name", 0] },
-            else: null,
+            else: {
+              $cond: {
+                if: { $ne: ["$timeSlots.patient", null] },
+                then: "Unknown Patient",
+                else: null,
+              },
+            },
           },
         },
         patientEmail: {

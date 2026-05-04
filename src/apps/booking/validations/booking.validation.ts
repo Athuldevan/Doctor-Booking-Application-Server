@@ -1,4 +1,5 @@
-import Joi from "joi";
+
+import Joi = require("joi");
 
 export const createSlotValidation = Joi.object({
   doctorId: Joi.string().required().hex().length(24),

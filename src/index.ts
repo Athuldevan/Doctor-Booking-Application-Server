@@ -25,7 +25,10 @@ app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 app.use(
   cors({
-    origin: "https://doctor-booking-application-client.vercel.app",
+    origin: [
+      // "https://doctor-booking-application-client.vercel.app",
+      "http://localhost:5173",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
