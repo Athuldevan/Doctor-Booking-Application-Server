@@ -17,7 +17,7 @@ export const generateRefreshToken = async (payload: IPayload) => {
 };
 
 export const verifyRefreshToken = async (token: string) => {
-  return  await jwt.verify(token, process.env.JWT_SECRET! as string);
+  return jwt.verify(token, process.env.JWT_SECRET! as string) as IPayload;
 };
 
 export const setAuthCookie = async (

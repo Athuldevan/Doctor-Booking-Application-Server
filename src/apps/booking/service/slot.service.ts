@@ -1,5 +1,4 @@
-// apps/slot/services/slot.service.ts
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { AppError } from "../../../utils/AppError";
 import Slot from "../model/slot.model";
 import { ISlot, ITimeSlot } from "../types/slot";
@@ -50,24 +49,38 @@ export const bookSlotService = async (
   timeSlotId: string,
   patientId: string
 ) => {
-  const slot = await Slot.findOneAndUpdate(
-    {
-      _id: doctorSlotId,
-      isDeleted: false,
-      "timeSlots._id": timeSlotId,
-      "timeSlots.status": "available",
-    },
-    {
-      $set: {
-        "timeSlots.$.status": "pending",
-        "timeSlots.$.patient": patientId,
-      },
-    },
-    { new: true }
-  );
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  if (!slot) throw new AppError("Slot not available or not found", 400);
-  return slot;
+  try {
+    const slot = await Slot.findOneAndUpdate(
+      {
+        _id: doctorSlotId,
+        isDeleted: false,
+        "timeSlots._id": timeSlotId,
+        "timeSlots.status": "available",
+      },
+      {
+        $set: {
+          "timeSlots.$.status": "pending",
+          "timeSlots.$.patient": patientId,
+        },
+      },
+      { session, new: true }
+    );
+
+    if (!slot) {
+      throw new AppError("Slot not available or not found", 400);
+    }
+
+    await session.commitTransaction();
+    return slot;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 export const updateSlotStatusService = async (
@@ -75,22 +88,36 @@ export const updateSlotStatusService = async (
   timeSlotId: string,
   status: ITimeSlot["status"]
 ) => {
-  const slot = await Slot.findOneAndUpdate(
-    {
-      _id: doctorSlotId,
-      isDeleted: false,
-      "timeSlots._id": timeSlotId,
-    },
-    {
-      $set: {
-        "timeSlots.$.status": status,
-      },
-    },
-    { new: true }
-  );
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  if (!slot) throw new AppError("Slot not found", 404);
-  return slot;
+  try {
+    const slot = await Slot.findOneAndUpdate(
+      {
+        _id: doctorSlotId,
+        isDeleted: false,
+        "timeSlots._id": timeSlotId,
+      },
+      {
+        $set: {
+          "timeSlots.$.status": status,
+        },
+      },
+      { session, new: true }
+    );
+
+    if (!slot) {
+      throw new AppError("Slot not found", 404);
+    }
+
+    await session.commitTransaction();
+    return slot;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 export const cancelSlotService = async (
@@ -99,26 +126,40 @@ export const cancelSlotService = async (
   cancelledBy: "patient" | "doctor" | "admin",
   cancelReason?: string
 ) => {
-  const slot = await Slot.findOneAndUpdate(
-    {
-      _id: doctorSlotId,
-      isDeleted: false,
-      "timeSlots._id": timeSlotId,
-      "timeSlots.status": { $in: ["pending", "confirmed"] },
-    },
-    {
-      $set: {
-        "timeSlots.$.status": "cancelled",
-        "timeSlots.$.cancelledBy": cancelledBy,
-        "timeSlots.$.cancelReason": cancelReason || null,
-        "timeSlots.$.patient": null,
-      },
-    },
-    { new: true }
-  );
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  if (!slot) throw new AppError("Slot not found or already cancelled", 400);
-  return slot;
+  try {
+    const slot = await Slot.findOneAndUpdate(
+      {
+        _id: doctorSlotId,
+        isDeleted: false,
+        "timeSlots._id": timeSlotId,
+        "timeSlots.status": { $in: ["pending", "confirmed"] },
+      },
+      {
+        $set: {
+          "timeSlots.$.status": "cancelled",
+          "timeSlots.$.cancelledBy": cancelledBy,
+          "timeSlots.$.cancelReason": cancelReason || null,
+          "timeSlots.$.patient": null,
+        },
+      },
+      { session, new: true }
+    );
+
+    if (!slot) {
+      throw new AppError("Slot not found or already cancelled", 400);
+    }
+
+    await session.commitTransaction();
+    return slot;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 export const deleteSlotService = async (
