@@ -9,16 +9,31 @@ import {
   updateADoctor,
 } from "../controllers/doctor.controller";
 import checkAccess from "../../../middlewares/checkAccess";
+import { validate } from "../../../utils/JoiValidatiojn";
+import {
+  addDoctorValidation,
+  updateDoctorValidation,
+} from "../validations/doctor.validation";
 
 const router = express.Router();
 router
   .route("/")
-  .post(checkAuth, tryCatch(addDoctor))
+  .post(
+    checkAuth,
+    checkAccess("admin"),
+    validate({ type: "body", schema: addDoctorValidation }),
+    tryCatch(addDoctor),
+  )
   .get(checkAuth, checkAccess("admin", "patient"), tryCatch(getAllDoctor));
 
 router
   .route("/:id")
   .get(checkAuth, checkAccess("admin", "patient"), tryCatch(getADoctor))
-  .put(checkAuth, checkAccess("admin"), tryCatch(updateADoctor))
+  .put(
+    checkAuth,
+    checkAccess("admin"),
+    validate({ type: "body", schema: updateDoctorValidation }),
+    tryCatch(updateADoctor),
+  )
   .patch(checkAuth, checkAccess("admin"), tryCatch(deleteADoctor));
 export default router;

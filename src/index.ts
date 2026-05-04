@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 import authRouter from "./apps/auth/routes/auth.routes";
-import tokenRoutes from "./apps/auth/routes/auth.routes";
+import tokenRoutes from "./apps/auth/routes/token.routes";
 import errorHandler from "./utils/errorHandler";
 import doctorRoutes from "./apps/doctor/routes/doctor.routes";
 import slotRoutes from "./apps/booking/routes/booking.routes";
