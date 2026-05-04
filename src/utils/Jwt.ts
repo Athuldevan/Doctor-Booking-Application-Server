@@ -28,7 +28,7 @@ export const setAuthCookie = async (
   const cookieOptions = {
     httpOnly: true,
     secure: true,
-    sameSite: none,
+    sameSite: "none" as const ,
     maxAge: 60 * 60 * 1000,
   };
 
