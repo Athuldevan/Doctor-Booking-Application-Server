@@ -8,6 +8,7 @@ import {
   cancelSlot,
   deleteSlot,
   updateSlotGroup,
+  getPatientHistory,
 } from "../controller/booking.controller";
 import { checkAuth } from "../../../middlewares/checkAuth";
 import checkAccess from "../../../middlewares/checkAccess";
@@ -16,11 +17,11 @@ import tryCatch from "../../../utils/tryCatch";
 const router = express.Router();
 
 router.post("/", checkAuth, checkAccess("admin"), createSlot);
-router.get("/", checkAuth, checkAccess("admin"), getAllSlots);
+router.get("/", checkAuth, checkAccess("admin", "patient"), getAllSlots);
+router.get("/patient/history", checkAuth, checkAccess("patient"), getPatientHistory);
 router.delete("/:doctorSlotId", checkAuth, checkAccess("admin"), deleteSlot);
 router.patch("/:doctorSlotId", checkAuth, checkAccess("admin"), updateSlotGroup);
 
-// admin + doctor
 router.patch(
   "/:doctorSlotId/status/:timeSlotId",
   checkAuth,
@@ -28,7 +29,6 @@ router.patch(
   updateSlotStatus,
 );
 
-// patient
 router.get("/doctor/:doctorId", checkAuth, getSlotsByDoctor);
 router.post(
   "/:doctorSlotId/book/:timeSlotId",
@@ -37,7 +37,6 @@ router.post(
   bookSlot,
 );
 
-// patient + admin
 router.patch("/:doctorSlotId/cancel/:timeSlotId", checkAuth, cancelSlot);
 
 export default router;

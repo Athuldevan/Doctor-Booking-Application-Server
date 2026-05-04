@@ -1,6 +1,6 @@
 import { Response } from "express";
 import tryCatch from "../../../utils/tryCatch";
-import { bookSlotService, cancelSlotService, createSlotService, deleteSlotService, getAllSlotsService, getSlotByDoctorService, updateSlotStatusService, updateSlotGroupService } from "../service/slot.service";
+import { bookSlotService, cancelSlotService, createSlotService, deleteSlotService, getAllSlotsService, getSlotByDoctorService, updateSlotStatusService, updateSlotGroupService, getPatientHistoryService } from "../service/slot.service";
 import { AuthRequest } from "../../../middlewares/checkAuth";
 
 
@@ -107,5 +107,15 @@ export const updateSlotGroup = tryCatch(async (req: AuthRequest, res: Response) 
     status: "success",
     message: "Slot group updated successfully",
     data: slot,
+  });
+});
+
+export const getPatientHistory = tryCatch(async (req: AuthRequest, res: Response) => {
+  const patientId = req.user?.userId as string;
+  const slots = await getPatientHistoryService(patientId);
+  return res.status(200).json({
+    status: "success",
+    message: "Patient history fetched",
+    data: slots,
   });
 });
