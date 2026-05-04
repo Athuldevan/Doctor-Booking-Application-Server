@@ -1,6 +1,4 @@
-# Doctor Booking Application
 
-A comprehensive full-stack application for managing doctor appointments, featuring a real-time admin dashboard, role-based access control, and robust slot management.
 
 ## 🚀 Features
 
@@ -18,11 +16,11 @@ A comprehensive full-stack application for managing doctor appointments, featuri
 - **Backend**: Node.js, Express, TypeScript, MongoDB, Mongoose, Joi, JWT.
 - **Frontend**: React, TypeScript, Vite, Tailwind CSS, Lucide React, React Toastify.
 
-## 📋 Setup Instructions
+
 
 ### Prerequisites
 - Node.js (v16+)
-- MongoDB (Local or Atlas)
+- MongoDB 
 
 ### Backend Setup
 1. Navigate to the server directory: `cd Doctor-Booking-Application`
@@ -72,5 +70,4 @@ A comprehensive full-stack application for managing doctor appointments, featuri
 ## 🛡️ Validation
 All requests are validated using Joi schemas to ensure data integrity and security.
 
----
-© 2024 Doctor Booking App
+

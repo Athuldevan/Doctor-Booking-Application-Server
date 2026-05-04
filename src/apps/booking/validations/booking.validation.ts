@@ -3,7 +3,9 @@ import Joi from "joi";
 export const createSlotValidation = Joi.object({
   doctorId: Joi.string().required().hex().length(24),
   date: Joi.date().iso().required(),
-  slotDuration: Joi.number().required().valid(15, 30, 45, 60),
+  slotDuration: Joi.number().required().valid(15, 20, 30, 45, 60),
+  startTime: Joi.string().optional(),
+  endTime: Joi.string().optional(),
   timeSlots: Joi.array().items(
     Joi.object({
       startTime: Joi.string().required().pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
