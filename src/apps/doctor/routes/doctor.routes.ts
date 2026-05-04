@@ -35,5 +35,5 @@ router
     validate({ type: "body", schema: updateDoctorValidation }),
     tryCatch(updateADoctor),
   )
-  .patch(checkAuth, checkAccess("admin"), tryCatch(deleteADoctor));
+  .delete(checkAuth, checkAccess("admin"), tryCatch(deleteADoctor));
 export default router;
