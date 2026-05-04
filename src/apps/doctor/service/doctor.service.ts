@@ -1,4 +1,3 @@
-import { FileIcon } from "lucide-react";
 import { AppError } from "../../../utils/AppError";
 import Doctor from "../models/doctor.model";
 import { IDoctor } from "../types/doctor.types";

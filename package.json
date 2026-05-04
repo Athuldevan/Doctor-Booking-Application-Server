@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "env-cmd -f .env.dev tsx watch src/apps/server.ts",
     "build": "tsc -p .",
-    "start": "env-cmd -f .env.prod node dist/apps/server.js"
+    "start": "node dist/apps/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,11 +20,15 @@
     "crypto": "^1.0.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "joi": "^18.1.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.1",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "env-cmd": "^11.0.0",
     "tsx": "^4.21.0"
   }
