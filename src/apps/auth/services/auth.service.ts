@@ -59,8 +59,8 @@ export const clearAuthCookie = (res: Response) => {
   ["accessToken", "refreshToken"].forEach((name) =>
     res.clearCookie(name, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax" as const,
+      secure: true,
+      sameSite: none,
     }),
   );
 };
